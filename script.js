@@ -3,17 +3,33 @@ $(document).ready(function () {
 
   async function getWeather(city) {
     const url = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${city}&appid=${API_KEY}`;
+
+    showLoader();
+
     const response = await fetch(url);
     const data = await response.json();
+
+    hideLoader();
+
     bindData(data)
   }
 
-  function bindData(data){
-    if(data.cod=="404"){
+  function showLoader() {
+    $(".loader").css('display', 'block');
+    $(".search-icon").css('display', 'none');
+  }
+
+  function hideLoader() {
+    $(".loader").css('display', 'none');
+    $(".search-icon").css('display', 'block');
+  }
+
+  function bindData(data) {
+    if (data.cod == "404") {
       $(".error").addClass('error-animation');
       return;
-    } else{
-      $(".error").removeClass('error-animation')
+    } else {
+      $(".error").removeClass('error-animation');
     }
     $('.weather-img').removeClass("in");
     $('.temprature').removeClass("in");
@@ -25,11 +41,11 @@ $(document).ready(function () {
     $(".city").addClass("out");
     $(".sub-text").addClass("out");
 
-    setTimeout(()=>{
-      $("#temprature").text(data.main.temp)
-      $("#city").text(data.name)
-      $("#humidity").text(data.main.humidity)
-      $("#wind").text(data.wind.speed)
+    setTimeout(() => {
+      $("#temprature").text(data.main.temp);
+      $("#city").text(data.name);
+      $("#humidity").text(data.main.humidity);
+      $("#wind").text(data.wind.speed);
 
       changeImages(data)
 
@@ -43,36 +59,36 @@ $(document).ready(function () {
       $(".city").addClass("in");
       $(".sub-text").addClass("in");
     }, "2200");
-    
+
   }
 
-  function changeImages(data){
-    if(data.weather[0].main == "Clouds"){
-      $('#weather-img').attr('src','images/clouds.png');
+  function changeImages(data) {
+    if (data.weather[0].main == "Clouds") {
+      $('#weather-img').attr('src', 'images/clouds.png');
     }
-    else if(data.weather[0].main == "Clear"){
-      $('#weather-img').attr('src','images/clear.png');
+    else if (data.weather[0].main == "Clear") {
+      $('#weather-img').attr('src', 'images/clear.png');
     }
-    else if(data.weather[0].main == "Rain"){
-      $('#weather-img').attr('src','images/rain.png');
+    else if (data.weather[0].main == "Rain") {
+      $('#weather-img').attr('src', 'images/rain.png');
     }
-    else if(data.weather[0].main == "Drizzle"){
-      $('#weather-img').attr('src','images/drizzle.png');
+    else if (data.weather[0].main == "Drizzle") {
+      $('#weather-img').attr('src', 'images/drizzle.png');
     }
-    else if(data.weather[0].main == "Mist"){
-      $('#weather-img').attr('src','images/mist.png');
+    else if (data.weather[0].main == "Mist") {
+      $('#weather-img').attr('src', 'images/mist.png');
     }
-    else if(data.weather[0].main == "Fog"){
-      $('#weather-img').attr('src','images/fog.png');
+    else if (data.weather[0].main == "Fog") {
+      $('#weather-img').attr('src', 'images/fog.png');
     }
   }
 
-  $('#input-form').submit(function(e){
+  $('#input-form').submit(function (e) {
     e.preventDefault();
-    if($("#search-input").val() == ""){
-      return
+    if ($("#search-input").val() == "") {
+      return;
     }
-    getWeather($("#search-input").val())
+    getWeather($("#search-input").val());
   })
 
 });
